@@ -11,6 +11,12 @@
 |
 */
 
+Auth::routes();
+
+Route::get('/admin/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
+Route::post('/admin/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
+Route::post('/admin/logout', 'Auth\AdminLoginController@logout')->name('admin.logout');
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -19,6 +25,5 @@ Route::get('/po', function () {
     return view('dashboard.order.index');
 });
 
-Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
