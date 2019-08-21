@@ -15,12 +15,12 @@ class CreateDetailUsersTable extends Migration
     {
         Schema::create('detail_users', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('organization_name');
-            $table->string('users_id')->nullable();
             $table->string('address');
             $table->timestamps();
 
-            $table->foreign('users_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

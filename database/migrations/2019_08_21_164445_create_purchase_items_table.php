@@ -15,12 +15,12 @@ class CreatePurchaseItemsTable extends Migration
     {
         Schema::create('purchase_items', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('purchase_orders_id')->nullable();
-            $table->unsignedBigInteger('list_items_id')->nullable();
+            $table->unsignedBigInteger('purchase_order_id')->nullable();
+            $table->unsignedBigInteger('list_item_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('purchase_orders_id')->references('id')->on('purchase_orders');
-            $table->foreign('list_items_id')->references('id')->on('list_items');
+            $table->foreign('purchase_order_id')->references('id')->on('purchase_orders');
+            $table->foreign('list_item_id')->references('id')->on('agreements_list_items');
         });
     }
 

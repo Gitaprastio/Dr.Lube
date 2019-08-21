@@ -17,12 +17,12 @@ class CreateListItemsTable extends Migration
             $table->bigIncrements('id');
             $table->double('cost');
             $table->integer('quantity');
-            $table->unsignedBigInteger('product_agreements_id')->nullable();
-            $table->unsignedBigInteger('products_id')->nullable();
+            $table->unsignedBigInteger('product_agreement_id')->nullable();
+            $table->unsignedBigInteger('product_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('product_agreements_id')->references('id')->on('product_agreements');
-            $table->foreign('products_id')->references('id')->on('products'); 
+            $table->foreign('product_agreement_id')->references('id')->on('product_agreements');
+            $table->foreign('product_id')->references('id')->on('products'); 
         });
     }
 
