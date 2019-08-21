@@ -10686,6 +10686,7 @@ a:focus {
   animation-timing-function: opacity cubic-bezier(0, 1, 0.4, 1);
 }
 
+
 .bg-gradient-primary {
   background-image: url("../../assets/image/background.png");
   background-size: cover;
