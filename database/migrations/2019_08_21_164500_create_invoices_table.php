@@ -19,10 +19,10 @@ class CreateInvoicesTable extends Migration
             $table->date('date_received')->nullable();
             $table->double('amount');
             $table->date('date_paid')->nullable();
-            $table->unsignedBigInteger('purchase_orders_id');
+            $table->unsignedBigInteger('purchase_order_id');
             $table->timestamps();
 
-            $table->foreign('purchase_orders_id')->references('id')->on('purchase_orders');
+            $table->foreign('purchase_order_id')->references('id')->on('purchase_orders');
 
         });
     }
