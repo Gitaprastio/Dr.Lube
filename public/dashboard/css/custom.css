@@ -12,3 +12,14 @@
     background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%); */
     /* background-size: cover; */
   }
+
+.btn-primary {
+    color: #fff;
+    background-color: #DE2C2A;
+    border-color: rgb(214, 73, 71);
+  }
+
+.btn-primary:hover {
+    background-color: #e06d6d;
+    border-color: rgb(236, 135, 134);
+}
