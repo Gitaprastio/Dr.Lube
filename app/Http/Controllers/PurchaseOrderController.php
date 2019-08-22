@@ -23,7 +23,7 @@ class PurchaseOrderController extends Controller
       $user = Auth::user();
       $uid = Auth::id();
 
-      $cost = ListItem::
+      $product["cost"] = ListItem::
       whereHas('agreement', function($q) use ($uid){
           $q->where('user_id', '=', $uid);
       })
@@ -35,9 +35,28 @@ class PurchaseOrderController extends Controller
       })
       ->get()->pluck('product');
 
-      // dd($product_name);
+      $product["name"] = ListItem::with('product')
+      ->whereHas('agreement', function($q) use ($uid){
+          $q->where('user_id', '=', $uid);
+      })
+      ->get()->pluck('product.product_name');
 
-      return view('dashboard.order.index', compact('title','products', 'cost'));
+      $product["id"] = ListItem::with('product')
+      ->whereHas('agreement', function($q) use ($uid){
+          $q->where('user_id', '=', $uid);
+      })
+      ->get()->pluck('product.id');
+
+      $product["list_id"] = ListItem::
+      whereHas('agreement', function($q) use ($uid){
+          $q->where('user_id', '=', $uid);
+      })
+      ->get()->pluck('id');
+
+      // $product = json_encode($product);
+      // dd($product); 
+
+      return view('dashboard.order.index', compact('title','products', 'product', 'product_name', 'product_id', 'cost'));
     }
 
     /**
