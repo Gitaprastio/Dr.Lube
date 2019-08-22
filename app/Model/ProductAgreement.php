@@ -10,11 +10,11 @@ class ProductAgreement extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User', 'users_id');
+        return $this->belongsTo('App\Model\User', 'users_id');
     }
 
     public function items()
     {
-        return $this->hasMany('App\ListItem', 'products_id', 'id');
+        return $this->hasMany('App\Model\ListItem', 'product_agreement_id', 'id');
     }
 }

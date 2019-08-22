@@ -18,12 +18,14 @@ Route::post('/admin/login', 'Auth\AdminLoginController@login')->name('admin.logi
 Route::post('/admin/logout', 'Auth\AdminLoginController@logout')->name('admin.logout');
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('/po', function () {
     return view('dashboard.order.index');
 });
+
+Route::resource('purchase', 'PurchaseOrderController');
 
 
 Route::get('/home', 'HomeController@index')->name('home');

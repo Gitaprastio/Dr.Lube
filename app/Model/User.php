@@ -38,15 +38,15 @@ class User extends Authenticatable
     ];
 
     public function detailUser(){
-        return hasOne('App\DetailUser');
+        return hasOne('App\Model\DetailUser');
     }
 
     public function agreement()
     {
-        return $this->hasMany('App\ProductAgreement', 'users_id', 'id');
+        return $this->hasMany('App\Model\ProductAgreement', 'users_id', 'id');
     }
     public function PO()
     {
-        return $this->hasMany('App\PurchaseOrder', 'users_id', 'id');
+        return $this->hasMany('App\Model\PurchaseOrder', 'users_id', 'id');
     }
 }

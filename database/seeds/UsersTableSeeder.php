@@ -11,10 +11,25 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+
+      $faker = Faker\Factory::create(); 
+      $limit = 10; 
+    
+      for ($i = 0; $i < $limit; $i++) {
+        $company = $faker->company;
+        
         DB::table('users')->insert([
-            'name' => 'Perusahaan A',
-            'email' => 'a@mail.com',
-            'password' => bcrypt('secret')
+          'name' => $company,
+          'email' => $faker->safeEmail,
+          'password' => bcrypt('secret')
         ]);
+
+        DB::table('detail_users')->insert([ 
+          'user_id' => DB::getPdo()->lastInsertId(),
+          'organization_name' => $company,
+          'address' => $faker->lastName,
+        ]);
+
+      }
     }
 }
