@@ -16,6 +16,7 @@ class CreateProductAgreementsTable extends Migration
         Schema::create('product_agreements', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->nullable();
+            $table->date('contract_date_start');
             $table->date('contract_date_end');
             $table->timestamps();
 
