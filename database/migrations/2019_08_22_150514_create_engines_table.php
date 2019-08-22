@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePurchaseOrdersTable extends Migration
+class CreateEnginesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreatePurchaseOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('purchase_orders', function (Blueprint $table) {
+        Schema::create('engines', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('status');
-            $table->double('amount');
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('engine_code');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -31,6 +27,6 @@ class CreatePurchaseOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('purchase_orders');
+        Schema::dropIfExists('engines');
     }
 }
