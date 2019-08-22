@@ -27,7 +27,7 @@
           <div class="card-body">
             <div class="form-group">
               <label for="1product">Product</label>
-              <select name="items[]" select class="form-control" id="1product">
+              <select required name="items[]" select class="form-control" id="1product">
                 <option disabled selected> -- SELECT PRODUCT -- </option>
                 @foreach ($products as $row)
                 <option value="{{$row->id}}">{{$row->product_name}}</option>
@@ -39,12 +39,12 @@
             <div class="form-group">
               <label for="price1">Price</label>
               <input name="price[]" class="price-form form-control" id="1price" value="0" type="hidden">
-              <input class="form-control" id="1priceFormatted" value="Rp. 0,00" disabled>
+              <input required class="form-control" id="1priceFormatted" value="Rp. 0,00" disabled>
               <small id="1priceHelp" class="form-text text-muted">Price per litre</small>
             </div>
             <div class="form-group">
               <label for="1quantity">Quantity</label>
-              <input name="quantity[]" type="number" class="form-control" id="1quantity" placeholder="Kuantitas">
+              <input required name="quantity[]" type="number" class="form-control" id="1quantity" placeholder="Kuantitas">
               <small id="1quantityHelp" class="form-text text-muted">Quantity(litre)</small>
             </div>
           </div>
@@ -65,7 +65,7 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="shipping_address">Shipping Address</label>
-              <textarea class="form-control" id="shipping_address" rows="3" required disabled>Address</textarea>
+              <textarea required name="shipping_address" class="form-control" id="shipping_address" rows="3" required disabled>{{$user->address}}</textarea>
             </div>
         
             <div class="form-group">
@@ -77,7 +77,7 @@
           </div>
           <div class="modal-footer">
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <button class="btn btn-success" type="button">Edit</button>
+            <button class="btn btn-success" id="editAddress" type="button">Edit</button>
             <button class="btn btn-primary" type="submit">Submit</button>
           </div>
         </div>
@@ -124,9 +124,21 @@ console.log(option);
 $( "#newForm" ).click(function(e) {
   e.preventDefault;
   counter++;
-  var form = '<div id="'+counter+'formProduct" class="col-lg-6 animated--grow-in"><div class="card shadow mb-4"><div class="card-header py-3 d-flex flex-row align-items-center justify-content-between"><h6 class="m-0 font-weight-bold text-primary">Product</h6><a href="#" role="button" class="test2" id="'+counter+'"><i class="fas fa-times fa-lg fa-fw text-danger"></i></a></div><div class="card-body"><div class="form-group"><label for="'+counter+'product">Product</label><select class="form-control" id="'+counter+'product">'+option+'</select><input name="list_id[]" class="form-control" id="'+counter+'listId" value="" type="hidden"><small id="'+counter+'productHelp" class="form-text text-muted">Choosen product</small></div><div class="form-group"><label for="price1">Price</label><input class="price-form form-control" id="'+counter+'price" value="0" type="hidden"><input class="form-control" id="'+counter+'priceFormatted" value="Rp. 0,00" disabled><small id="'+counter+'priceHelp" class="form-text text-muted">Price per litre</small></div><div class="form-group"><label for="'+counter+'quantity">Quantity</label><input type="number" class="form-control" id="'+counter+'quantity" placeholder="Kuantitas"><small id="'+counter+'quantityHelp" class="form-text text-muted">Quantity(litre)</small></div></div></div></div>'
+  var form = '<div id="'+counter+'formProduct" class="col-lg-6 animated--grow-in"><div class="card shadow mb-4"><div class="card-header py-3 d-flex flex-row align-items-center justify-content-between"><h6 class="m-0 font-weight-bold text-primary">Product</h6><a href="#" role="button" class="test2" id="'+counter+'"><i class="fas fa-times fa-lg fa-fw text-danger"></i></a></div><div class="card-body"><div class="form-group"><label for="'+counter+'product">Product</label><select class="form-control" id="'+counter+'product">'+option+'</select><input required name="list_id[]" class="form-control" id="'+counter+'listId" value="" type="hidden"><small id="'+counter+'productHelp" class="form-text text-muted">Choosen product</small></div><div class="form-group"><label for="price1">Price</label><input class="price-form form-control" id="'+counter+'price" value="0" type="hidden"><input class="form-control" id="'+counter+'priceFormatted" value="Rp. 0,00" disabled><small id="'+counter+'priceHelp" class="form-text text-muted">Price per litre</small></div><div class="form-group"><label for="'+counter+'quantity">Quantity</label><input required type="number" class="form-control" id="'+counter+'quantity" placeholder="Kuantitas"><small id="'+counter+'quantityHelp" class="form-text text-muted">Quantity(litre)</small></div></div></div></div>'
   $( "#formPurchaseOrder" ).append( form );
   console.log(counter);
+});
+
+$(document).on('click', '.test2' , function(e) {
+  e.preventDefault;
+  var remove = '#formProduct'+$(this).attr('id');
+  $(this).first().parents().eq(2).remove();
+  console.log(remove);
+});
+
+$( "#editAddress" ).click(function(e) {
+  e.preventDefault;
+  $("#shipping_address").removeAttr("disabled");
 });
 
 $(document).on('click', '.test2' , function(e) {

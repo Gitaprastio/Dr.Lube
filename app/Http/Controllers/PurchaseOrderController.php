@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Model\PurchaseOrder;
 use App\Model\User;
+use App\Model\DetailUser;
 use App\Model\ProductAgreement;
 use App\Model\ListItem;
 
@@ -20,8 +21,9 @@ class PurchaseOrderController extends Controller
     {
       $title = "Purchase Order";
 
-      $user = Auth::user();
       $uid = Auth::id();
+
+      $user = DetailUser::where('user_id', $uid)->first();
 
       $product["cost"] = ListItem::
       whereHas('agreement', function($q) use ($uid){
@@ -56,7 +58,7 @@ class PurchaseOrderController extends Controller
       // $product = json_encode($product);
       // dd($product); 
 
-      return view('dashboard.order.index', compact('title','products', 'product', 'product_name', 'product_id', 'cost'));
+      return view('dashboard.order.index', compact('title','user','products', 'product', 'product_name', 'product_id', 'cost'));
     }
 
     /**
