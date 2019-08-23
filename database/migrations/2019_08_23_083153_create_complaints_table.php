@@ -17,6 +17,7 @@ class CreateComplaintsTable extends Migration
             $table->bigIncrements('id');
             $table->string('subject');
             $table->text('complaint_desc');
+            $table->integer('status');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
