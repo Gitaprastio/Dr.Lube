@@ -27,5 +27,4 @@ Route::get('/po', function () {
 
 Route::resource('purchase', 'PurchaseOrderController');
 
-
 Route::get('/home', 'HomeController@index')->name('home');

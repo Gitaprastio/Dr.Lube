@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Model\PurchaseOrder;
+use App\Model\PurchaseItem;
 use App\Model\User;
 use App\Model\DetailUser;
 use App\Model\ProductAgreement;
@@ -79,7 +80,30 @@ class PurchaseOrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      // dd($request);
+      $uid = Auth::id();
+      
+      $user = DetailUser::where('user_id', $uid)->first();
+
+      $po = new PurchaseOrder;
+      $po->status = 1;
+      $po->amount = $request->total_price;
+      if ($request->shipping_address) {
+        $po->shipping_address = $request->shipping_address;
+      }else {
+        $po->shipping_address = $user->address;
+      }
+      $po->user_id = $uid;
+      $po->save();
+
+      $pid = $po->id;
+      foreach ($request->list_id as $key => $value) {
+        $data = new PurchaseItem;
+        $data->purchase_order_id = $pid;
+        $data->list_item_id = $value;
+        $data->quantity = $request->quantity[$key];
+        $data->save();
+      }
     }
 
     /**
