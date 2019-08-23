@@ -75,9 +75,29 @@ class AdminLoginController extends Controller
     public function login(Request $request)
     {
         if (auth()->guard('admin')->attempt(['email' => $request->email, 'password' => $request->password ])) {
-            return redirect()->route('adminpage');
+            if(auth()->admin()->hasRole('sales')){
+                return redirect('/sales');
+            }else if(auth()->admin()->hasRole('operation')){
+                return redirect('/operation');
+            }else if(auth()->admin()->hasRole('complain')){
+                return redirect('/complain');
+            }else{
+                return redirect('/home');
+            }
         }
         return back()->withErrors(['email' => 'Email or password are wrong.']);
+    }
+
+    public function authenticated(\Illuminate\Http\Request $request, $user){
+        if(auth()->admin()->hasRole('sales')){
+            return redirect('/sales');
+        }else if(auth()->admin()->hasRole('operation')){
+            return redirect('/operation');
+        }else if(auth()->admin()->hasRole('complain')){
+            return redirect('/complain');
+        }else{
+            return redirect('/home');
+        }
     }
 
 

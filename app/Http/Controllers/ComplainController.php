@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Model\Complaint;
 
 class ComplainController extends Controller
 {
@@ -34,7 +35,11 @@ class ComplainController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = new Complaint;
+        $data -> subject = $request -> subject;
+        $data -> complaint_desc = $request -> complaint_desc;
+        $data -> user_id = auth()->user()->id;
+        $data -> save;
     }
 
     /**

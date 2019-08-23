@@ -22,21 +22,21 @@ class AdminsTableSeeder extends Seeder
         
         $data = new Admin();
         $data->name = $company;
-        $data->email = $faker->safeEmail;
+        $data->email = "sales@mail.com";
         $data->password = bcrypt('secret');
         $data->save();
         $data->assignRole('sales');
 
         $data = new Admin();
         $data->name = $company;
-        $data->email = $faker->safeEmail;
+        $data->email = "operation@mail.com";
         $data->password = bcrypt('secret');
         $data->save();
         $data->assignRole('operation');
 
         $data = new Admin();
         $data->name = $company;
-        $data->email = $faker->safeEmail;
+        $data->email = "complaint@mail.com";
         $data->password = bcrypt('secret');
         $data->save();
         $data->assignRole('complain');
