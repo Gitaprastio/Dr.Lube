@@ -46,5 +46,5 @@ Route::middleware('role:operation')->group(function(){
 });
 
 Route::middleware('role:complain')->group(function(){
-    Route::resource('complain', 'ComplaintController');
+    Route::resource('complain', 'ComplainController');
 });
