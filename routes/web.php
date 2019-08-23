@@ -13,10 +13,6 @@
 
 Auth::routes();
 
-Route::get('/admin/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
-Route::post('/admin/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
-Route::post('/admin/logout', 'Auth\AdminLoginController@logout')->name('admin.logout');
-
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -37,6 +33,6 @@ Route::middleware('role:operation')->group(function(){
     Route::resource('operation', 'OperationController');
 });
 
-Route::middleware('role:operation')->group(function(){
-    Route::resource('operation', 'OperationController');
+Route::middleware('role:complain')->group(function(){
+    Route::resource('complain', 'ComplaintController');
 });
