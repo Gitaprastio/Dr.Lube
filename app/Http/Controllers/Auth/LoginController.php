@@ -25,7 +25,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/purchase';
 
     /**
      * Create a new controller instance.
@@ -35,5 +35,17 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function authenticated(\Illuminate\Http\Request $request, $user){
+        if(auth()->admin()->hasRole('sales')){
+            return redirect('/sales');
+        }else if(auth()->admin()->hasRole('operation')){
+            return redirect('/operation');
+        }else if(auth()->admin()->hasRole('complain')){
+            return redirect('/complain');
+        }else{
+            return redirect('/home');
+        }
     }
 }

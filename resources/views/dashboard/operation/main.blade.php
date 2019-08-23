@@ -27,7 +27,7 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    @include('dashboard/sidebar')
+    @include('dashboard/operation/sidebar')
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
