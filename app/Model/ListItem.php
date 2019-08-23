@@ -17,4 +17,9 @@ class ListItem extends Model
     {
         return $this->belongsTo('App\Model\Product', 'product_id');
     }
+
+    public function purchaseItem()
+    {
+        return $this->hasMany('App\Model\PurchaseItem', 'list_item_id', 'id');
+    }
 }
