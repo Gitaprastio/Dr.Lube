@@ -21,6 +21,18 @@ Route::get('/po', function () {
     return view('dashboard.order.index');
 });
 
+Route::get('/sls', function () {
+    return view('dashboard.sales.index');
+});
+
+Route::get('/op', function () {
+    return view('dashboard.operation.index');
+});
+
+Route::get('/cmp', function () {
+    return view('dashboard.complain.index');
+});
+
 Route::resource('purchase', 'PurchaseOrderController');
 
 Route::get('/home', 'HomeController@index')->name('home');
