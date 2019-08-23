@@ -14,31 +14,6 @@ class AdminsTableSeeder extends Seeder
      */
     public function run()
     {
-        $role = Role::create(['name' => 'sales'],['guard_name'=>'admin']);
-        $role = Role::create(['name' => 'operation'],['guard_name'=>'admin']);
-        $role = Role::create(['name' => 'complain'],['guard_name'=>'admin']);
-        $faker = Faker\Factory::create();   
-        $company = $faker->company;
         
-        $data = new Admin();
-        $data->name = $company;
-        $data->email = "sales@mail.com";
-        $data->password = bcrypt('secret');
-        $data->save();
-        $data->assignRole('sales');
-
-        $data = new Admin();
-        $data->name = $company;
-        $data->email = "operation@mail.com";
-        $data->password = bcrypt('secret');
-        $data->save();
-        $data->assignRole('operation');
-
-        $data = new Admin();
-        $data->name = $company;
-        $data->email = "complaint@mail.com";
-        $data->password = bcrypt('secret');
-        $data->save();
-        $data->assignRole('complain');
     }
 }

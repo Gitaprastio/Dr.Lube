@@ -1,0 +1,25 @@
+.bg-gradient-primary {
+    background: rgb(222, 45, 42);
+    background-image: repeating-linear-gradient(
+        45deg,
+        #8d8d8d2c 0,
+        #2727272f 190px,
+        transparent 80px,
+        transparent 100px
+    )
+    /* background-size: cover;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #4e73df), to(#224abe));
+    background-image: linear-gradient(180deg, #4e73df 10%, #224abe 100%); */
+    /* background-size: cover; */
+  }
+
+.btn-primary {
+    color: #fff;
+    background-color: #DE2C2A;
+    border-color: rgb(214, 73, 71);
+  }
+
+.btn-primary:hover {
+    background-color: #e06d6d;
+    border-color: rgb(236, 135, 134);
+}

@@ -15,7 +15,12 @@ class CreatePurchaseOrderActivitiesTable extends Migration
     {
         Schema::create('purchase_order_activities', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('purchase_order_id')->nullable();
+            $table->integer('status');
+            $table->date('po_time');
             $table->timestamps();
+
+            $table->foreign('purchase_order_id')->references('id')->on('purchase_orders');
         });
     }
 
