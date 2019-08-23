@@ -46,7 +46,7 @@ class LoginController extends Controller
       }else if(auth()->user()->hasRole('complain')){
           return redirect('/complain');
       }else{
-          return redirect('/home');
+          return redirect('/purchase');
       }
 
     }
