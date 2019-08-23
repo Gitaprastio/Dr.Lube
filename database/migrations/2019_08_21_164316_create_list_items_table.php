@@ -16,7 +16,7 @@ class CreateListItemsTable extends Migration
         Schema::create('agreements_list_items', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->double('cost');
-            $table->integer('quantity');
+            $table->bigInteger('quantity');
             $table->unsignedBigInteger('product_agreement_id')->nullable();
             $table->unsignedBigInteger('product_id')->nullable();
             $table->timestamps();

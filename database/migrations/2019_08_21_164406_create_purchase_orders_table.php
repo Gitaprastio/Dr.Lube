@@ -17,6 +17,7 @@ class CreatePurchaseOrdersTable extends Migration
             $table->bigIncrements('id');
             $table->integer('status');
             $table->double('amount');
+            $table->string('shipping_address');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
 

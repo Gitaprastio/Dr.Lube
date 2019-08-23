@@ -20,6 +20,7 @@ class ProductsTableSeeder extends Seeder
         
         DB::table('products')->insert([
           'product_name' => $faker->randomElement($name) . '-' . $faker->numberBetween($min = 100, $max = 999),
+          'product_code' => $faker->swiftBicNumber,
           'product_desc' => $faker->text($maxNbChars = 255)
         ]);
 

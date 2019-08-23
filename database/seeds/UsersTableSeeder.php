@@ -27,7 +27,7 @@ class UsersTableSeeder extends Seeder
         DB::table('detail_users')->insert([ 
           'user_id' => DB::getPdo()->lastInsertId(),
           'organization_name' => $company,
-          'address' => $faker->lastName,
+          'address' => $faker->streetAddress,
         ]);
 
       }
