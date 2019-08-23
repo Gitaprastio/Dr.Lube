@@ -10,11 +10,17 @@
       <h6 class="m-0 font-weight-bold text-primary">Catatan Pembelian</h6>
     </div>
     <div class="card-body">
-      <p>Nama Perusahaan : Mangga Company <br> Tanggal Order  : 10 Septembe 2018 <br> </p>
+      <p>
+        Company : {{$data->user->name}} <br> 
+        Purcchase Date  : {{date("d F Y G:i:s", strtotime($data->created_at))}} <br> 
+        Shipping Address : {{$data->shipping_address}} <br> 
+        Total Cost : Rp. {{number_format($data->amount,3,',','.')}} <br> 
+      </p>
     </div>
   </div>
 
-  <!-- Content Row -->
+  @foreach ($product as $item)
+      
   <div class="row">
 
     <!-- Earnings (Monthly) Card Example -->
@@ -24,7 +30,7 @@
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
               <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Product</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">Oli Coklat</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{$item->listItem->product->product_name}}</div>
             </div>
             <div class="col-auto">
               <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -41,7 +47,7 @@
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
               <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Price</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">Rp. {{number_format($item->listItem->cost,3,',','.')}}</div>
             </div>
             <div class="col-auto">
               <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -60,7 +66,7 @@
               <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Quantities</div>
               <div class="row no-gutters align-items-center">
                 <div class="col-auto">
-                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">10000 Liter</div>
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{$item->quantity}} Litre</div>
                 </div>
               </div>
             </div>
@@ -72,10 +78,33 @@
       </div>
     </div>
 
-<!-- End of Main Content -->
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Cost</div>
+              <div class="row no-gutters align-items-center">
+                <div class="col-auto">
+                  @php
+                      $total = $item->listItem->cost * $item->quantity;
+                  @endphp
+                  <div class="h6 mb-0 mr-3 font-weight-bold text-gray-800">Rp. {{number_format($total,3,',','.')}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div>
 
+  @endforeach
 </div>
 
 @endsection
