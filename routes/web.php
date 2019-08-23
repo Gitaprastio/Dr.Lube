@@ -28,3 +28,15 @@ Route::get('/po', function () {
 Route::resource('purchase', 'PurchaseOrderController');
 
 Route::get('/home', 'HomeController@index')->name('home');
+//sales
+Route::middleware('role:sales')->group(function(){
+    Route::resource('sales','SalesController');
+});
+//operation
+Route::middleware('role:operation')->group(function(){
+    Route::resource('operation', 'OperationController');
+});
+
+Route::middleware('role:operation')->group(function(){
+    Route::resource('operation', 'OperationController');
+});

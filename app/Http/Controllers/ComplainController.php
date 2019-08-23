@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Auth;
-use App\Model\DetailUser;
 
-class SalesController extends Controller
+class ComplainController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,6 +15,7 @@ class SalesController extends Controller
     {
         return view('dashboard.sales.index');
     }
+
     /**
      * Show the form for creating a new resource.
      *

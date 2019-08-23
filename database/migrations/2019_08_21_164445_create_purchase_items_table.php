@@ -17,6 +17,7 @@ class CreatePurchaseItemsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('purchase_order_id')->nullable();
             $table->unsignedBigInteger('list_item_id')->nullable();
+            $table->bigInteger('quantity');
             $table->timestamps();
 
             $table->foreign('purchase_order_id')->references('id')->on('purchase_orders');
