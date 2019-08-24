@@ -1,4 +1,4 @@
-@extends('dashboard.sales.main')
+@extends('dashboard.main')
 @section('css')
     
 @endsection
@@ -6,10 +6,10 @@
 <div class="container-fluid">
 
   <!-- Page Heading -->
-  <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Sales Dashboard</h1>
+  <div class="d-sm-flex align-items-center justify-content-between mb-3">
+    <h1 class="h3 mb-0 text-gray-800">Purchase Order List</h1>
   </div>
-
+  
   @if (session('alert'))
   <div class="alert alert-primary" role="alert">
     {{ session('alert') }}
@@ -26,8 +26,9 @@
           <thead>
             <tr>
               <th>No</th>
-              <th>Organization</th>
               <th>Purchase Date</th>
+              <th>Shipping Date</th>
+              <th>Total Cost</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -39,21 +40,12 @@
                 
             <tr>
               <td>{{$no}}</td>
-              <td>{{$purchase->user->name}}</td>
               <td>{{date("d F Y G:i:s", strtotime($purchase->created_at))}}</td>
+              <td>{{date("d F Y G:i:s", strtotime($purchase->shipping_date))}}</td>
+              <td>Rp. {{number_format($purchase->amount,3,',','.')}}</td>
               <td>
                   <div>
-                    <form action="{{ route('sales.accept', $purchase->id) }}" method="POST">
-                        {{ csrf_field() }}
-                        {{ method_field('PUT') }}
-                        <button class="w-100 btn btn-success" title="Confirm Purchase Order" onclick="return confirm('Confirm purchase order?')">Confirm</button>
-                    </form>
-                    <form action="{{ route('sales.reject', $data->id) }}" method="POST">
-                        {{ csrf_field() }}
-                        {{ method_field('PUT') }}
-                        <button class="w-100 btn btn-danger" title="Reject Purchase Order" onclick="return confirm('Reject purchase order?')">Reject</button>
-                    </form>
-                    <a href="{{ route('sales.show', $purchase->id) }}" class="btn btn-info">Details</a>
+                    <a href="{{ route('purchase.show', $purchase->id) }}" class="btn btn-info">Details</a>
                   </div>
               </td>
             </tr>
@@ -70,7 +62,8 @@
   </div>
 
 </div>
-
+@endsection
+@section('modal')
 @endsection
 @section('js')
 <script>

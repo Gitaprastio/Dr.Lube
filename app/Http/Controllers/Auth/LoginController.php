@@ -38,14 +38,17 @@ class LoginController extends Controller
     }
 
     public function authenticated(\Illuminate\Http\Request $request, $user){
-        if(auth()->admin()->hasRole('sales')){
-            return redirect('/sales');
-        }else if(auth()->admin()->hasRole('operation')){
-            return redirect('/operation');
-        }else if(auth()->admin()->hasRole('complain')){
-            return redirect('/complain');
-        }else{
-            return redirect('/home');
-        }
+
+      if(auth()->user()->hasRole('sales')){
+          return redirect('/sales');
+      }else if(auth()->user()->hasRole('operation')){
+          return redirect('/operation');
+      }else if(auth()->user()->hasRole('complain')){
+          return redirect('/complain');
+      }else{
+          return redirect('/purchase');
+      }
+
     }
+
 }

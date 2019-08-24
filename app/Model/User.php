@@ -5,11 +5,14 @@ namespace App\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use HasRoles;
 
+    protected $guard_name = 'web'; 
     /**
      * The attributes that are mass assignable.
      *
@@ -47,6 +50,6 @@ class User extends Authenticatable
     }
     public function PO()
     {
-        return $this->hasMany('App\Model\PurchaseOrder', 'users_id', 'id');
+        return $this->hasMany('App\Model\PurchaseOrder', 'user_id', 'id');
     }
 }

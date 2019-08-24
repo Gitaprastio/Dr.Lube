@@ -1,4 +1,4 @@
-@extends('dashboard.main')
+@extends('dashboard.order.main')
 @section('css')
     
 @endsection
