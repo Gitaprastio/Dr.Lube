@@ -30,7 +30,7 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    @include('dashboard/sales/sidebar')
+    @include('dashboard/order/sidebar')
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->

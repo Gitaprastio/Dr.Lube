@@ -18,7 +18,7 @@ class PurchaseOrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function purchase()
     {
       $title = "Purchase Order";
 
@@ -60,6 +60,20 @@ class PurchaseOrderController extends Controller
       // dd($product); 
 
       return view('dashboard.order.index', compact('title','user','products', 'product', 'product_name', 'product_id', 'cost'));
+    }
+
+    public function index() 
+    {
+      $title = "Purchase Order List";
+      $uid = Auth::id();
+
+      $purchases = PurchaseOrder::
+      where('user_id', $uid)
+      ->orderBy('created_at', 'asc')
+      ->get();
+
+      // dd($purchases);
+      return view('dashboard.order.dashboard', compact('title','purchases'));
     }
 
     /**
@@ -114,7 +128,17 @@ class PurchaseOrderController extends Controller
      */
     public function show($id)
     {
-        //
+      $title = "Purchase Order Detail";
+      $data = PurchaseOrder::where('id', $id)
+      ->with('user')
+      ->first();
+
+      $product = PurchaseItem::where('purchase_order_id', $id)
+      ->with(['listItem.product', 'listItem'])
+      ->get();
+      
+      // dd($product);
+      return view('dashboard.order.detail', compact('data', 'product', 'title'));
     }
 
     /**

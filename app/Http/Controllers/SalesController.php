@@ -57,7 +57,7 @@ class SalesController extends Controller
      */
     public function show($id)
     {
-      $title = "Dashboard Admin | Lihat data pembicara";
+      $title = "Purchase Order Detail";
       $data = PurchaseOrder::where('id', $id)
       ->with('user')
       ->first();
@@ -102,5 +102,21 @@ class SalesController extends Controller
     public function destroy($id)
     {
         //
+    }
+    
+    public function accept($id)
+    {
+        $data = PurchaseOrder::find($id);
+        $data->status = 2;
+        $data->save();
+        return redirect()->route('sales.index')->with('alert','Purchase has been approved!');
+    }
+    
+    public function reject($id)
+    {
+        $data = PurchaseOrder::find($id);
+        $data->status = 90;
+        $data->save();
+        return redirect()->route('sales.index')->with('alert','Purchase has been Rejected!');
     }
 }
