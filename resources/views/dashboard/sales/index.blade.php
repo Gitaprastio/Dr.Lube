@@ -7,8 +7,7 @@
 
   <!-- Page Heading -->
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Seller Dashboard</h1>
-    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+    <h1 class="h3 mb-0 text-gray-800">Sales Dashboard</h1>
   </div>
 
   <div class="card shadow mb-4">
@@ -22,83 +21,34 @@
             <tr>
               <th>No</th>
               <th>Organization</th>
-              <th>Product</th>
+              <th>Purchase Date</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
+            @php
+                $no = 1;
+            @endphp
+            @foreach ($purchases as $purchase)
+                
             <tr>
-              <td>1</td>
-              <td>Mangga Company</td>
-              <td>Oli Coklat</td>
+              <td>{{$no}}</td>
+              <td>{{$purchase->user->name}}</td>
+              <td>{{date("d F Y G:i:s", strtotime($purchase->created_at))}}</td>
               <td>
                   <div>
                     <a href="#" class="btn btn-success">Confirm</a>
                     <a href="#" class="btn btn-danger">Reject</a>
-                    <a href="details.html" class="btn btn-info">Details</a>
+                    <a href="{{ route('sales.show', $purchase->id) }}" class="btn btn-info">Details</a>
                   </div>
               </td>
             </tr>
-            <tr>
-              <td>2</td>
-              <td>Jeruk Company</td>
-              <td>Oli Mocca</td>
-              <td>
-                  <div>
-                      <a href="#" class="btn btn-success">Confirm</a>
-                      <a href="#" class="btn btn-danger">Reject</a>
-                      <a href="#" class="btn btn-info">Details</a>
-                  </div>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Coconut Company</td>
-              <td>Oli Markisa</td>
-              <td>
-                  <div>
-                      <a href="#" class="btn btn-success">Confirm</a>
-                      <a href="#" class="btn btn-danger">Reject</a>
-                      <a href="#" class="btn btn-info">Details</a>
-                  </div>
-              </td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>Banana Company</td>
-              <td>Oli Melon</td>
-              <td>
-                  <div>
-                      <a href="#" class="btn btn-success">Confirm</a>
-                      <a href="#" class="btn btn-danger">Reject</a>
-                      <a href="#" class="btn btn-info">Details</a>
-                  </div>
-              </td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>Avocado Company</td>
-              <td>Oli Vanilla</td>
-              <td>
-                  <div>
-                      <a href="#" class="btn btn-success">Confirm</a>
-                      <a href="#" class="btn btn-danger">Reject</a>
-                      <a href="#" class="btn btn-info">Details</a>
-                  </div>
-              </td>
-            </tr>
-            <tr>
-              <td>6</td>
-              <td>Durian Company</td>
-              <td>Oli Strawberry</td>
-              <td>
-                  <div>
-                      <a href="#" class="btn btn-success">Confirm</a>
-                      <a href="#" class="btn btn-danger">Reject</a>
-                      <a href="#" class="btn btn-info">Details</a>
-                  </div>
-              </td>
-            </tr>
+
+            @php
+                $no++
+            @endphp
+            @endforeach
+            
           </tbody>
         </table>
       </div>
