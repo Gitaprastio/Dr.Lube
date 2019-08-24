@@ -18,36 +18,118 @@
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.css" rel="stylesheet">
   <link href="css/custom.css" rel="stylesheet">
+  <link href="tracking_style.scss" rel="stylesheet">
+
 
   <!-- Chat Bot -->
   <!-- Start of Async Drift Code -->
-<script>
-  "use strict";
-  
-  !function() {
-    var t = window.driftt = window.drift = window.driftt || [];
-    if (!t.init) {
-      if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
-      t.invoked = !0, t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ], 
-      t.factory = function(e) {
-        return function() {
-          var n = Array.prototype.slice.call(arguments);
-          return n.unshift(e), t.push(n), t;
+  <script>
+    "use strict";
+    
+    !function() {
+      var t = window.driftt = window.drift = window.driftt || [];
+      if (!t.init) {
+        if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
+        t.invoked = !0, t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ], 
+        t.factory = function(e) {
+          return function() {
+            var n = Array.prototype.slice.call(arguments);
+            return n.unshift(e), t.push(n), t;
+          };
+        }, t.methods.forEach(function(e) {
+          t[e] = t.factory(e);
+        }), t.load = function(t) {
+          var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
+          o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
+          var i = document.getElementsByTagName("script")[0];
+          i.parentNode.insertBefore(o, i);
         };
-      }, t.methods.forEach(function(e) {
-        t[e] = t.factory(e);
-      }), t.load = function(t) {
-        var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
-        o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
-        var i = document.getElementsByTagName("script")[0];
-        i.parentNode.insertBefore(o, i);
-      };
-    }
-  }();
-  drift.SNIPPET_VERSION = '0.3.1';
-  drift.load('sbw4wwi2ebr6');
-  </script>
-  <!-- End of Async Drift Code -->
+      }
+    }();
+    drift.SNIPPET_VERSION = '0.3.1';
+    drift.load('sbw4wwi2ebr6');
+    </script>
+    <!-- End of Async Drift Code -->
+
+    angular.module('appModule', ['stepperModule']);
+
+// Stepper Module ready to be included
+// ===================================
+
+angular.module('stepperModule', ['ngAnimate', 'ui.bootstrap'])
+  .directive('stepperDirective', stepperDirective);
+
+function stepperController($scope) {
+  $scope.forms = {
+    "steps": [{
+      step: 1,
+      name: "First Step",
+      // template: 'This is the first step',
+      // template: "template.step1.html", // Load an html file. Ideally with Angular template cache. If you do so you have to replace {{step.template}} with ng-include="step.template" in directive -> template: ....
+      expanded: true
+    }, {
+      step: 2,
+      name: "Second Step",
+      // template: "This is the second step",
+      // template: "template.step2.html", // Load an html file. Ideally with Angular template cache. If you do so you have to replace {{step.template}} with ng-include="step.template" in directive -> template: ....
+      expanded: false
+    }, {
+      step: 3,
+      name: "Third Step",
+      // template: "This is the third step",
+      // template: "template.step3.html", // Load an html file. Ideally with Angular template cache. If you do so you have to replace {{step.template}} with ng-include="step.template" in directive -> template: ....
+      expanded: false
+    }, {
+      step: 4,
+      name: "Fourth Step",
+      // template: "This is the fourth step",
+      // template: "template.step4.html", // Load an html file. Ideally with Angular template cache. If you do so you have to replace {{step.template}} with ng-include="step.template" in directive -> template: ....
+      expanded: false
+    }]
+  }
+}
+
+function stepperDirective() {
+
+  function link($scope, $element, $attrs) {
+    $scope.toggleListItems = function(index) {
+
+      $scope.forms.steps[index].expanded = !$scope.forms.steps[index].expanded;
+
+      for (var i = 0; i < $scope.forms.steps.length; i++) {
+
+        if ($scope.forms.steps[i].expanded === true && i != index) {
+          $scope.forms.steps[i].expanded = false;
+        }
+      }
+    };
+  }
+
+  var directive = {
+    restrict: 'E',
+    scope: {},
+    controller: stepperController,
+    template: "<div class=\"stepper\">\n" +
+      "<div class=\"step\" ng-repeat=\"step in forms.steps\">\n" + 
+      "<div class=\"step-heading\" ng-class=\"{\"active\":!step.expanded}\" ng-click=\"toggleListItems($index)\">\n" +
+      "<div class=\"circle\">{{step.step}}</div>\n" +
+      "<div class=\"title\">{{step.name}}</div>\n" +
+      "</div>" +
+      "<div class=\"line\" ng-hide=\"step.step >=forms.steps.length\">\n" +
+      "</div>\n" +
+      "<div uib-collapse=\"!step.expanded\">\n" +
+      "<div class=\"body\">\n" +
+      "<div>{{step.template}}</div>\n" +
+      "<button ng-hide=\"step.step >=forms.steps.length\" ng-click=\"toggleListItems($index + 1)\" class=\"btn btn-sm btn-bg ripple\" name=\"next\" type=\"button\"> Next </button>\n" + 
+      "<button ng-hide=\"step.step <=1\" ng-class=\"{\"btn-bg\": step.step==forms.steps.length}\" ng-click=\"toggleListItems($index - 1)\" class=\"btn btn-sm ripple\" name=\"previous\" type=\"button\"> Previous </button>\n" +
+      "</div>\n" +
+      "</div>\n" +
+      "</div>\n" +
+      "</div>",
+    link: link
+  };
+  return directive;
+}
 
 </head>
 
@@ -72,7 +154,7 @@
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
         <a class="nav-link" href="index.html">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <i class="fas fa-fw fa-tachometer-alt fa-2x text-gray-300"></i>
           <span>Dashboard</span></a>
       </li>
 
@@ -86,24 +168,17 @@
 
       <!-- Nav Item - Charts -->
       <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+        <a class="nav-link" href="#">
           <i class="fas fa-fw fa-chart-area fa-2x text-gray-300"></i>
           <span>Tracking</span></a>
       </li>
 
       <!-- Nav Item - Tables -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link collapsed" href="complaint.html">
           <i class="fas fa-comments fa-2x text-gray-300"></i>
-          <span>Contact</span>
+          <span>Complaint</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Components:</h6>
-            <a class="collapse-item" href="chatbot.html">Chatbot</a>
-            <a class="collapse-item" href="complaint.html">Complaint</a>
-          </div>
-        </div>
       </li>
 
       <!-- Divider -->
@@ -311,78 +386,36 @@
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Chatbot</h1>
+            <h1 class="h3 mb-0 text-gray-800">Tracking</h1>
+            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
           </div>
         </div>
         <!-- /.container-fluid -->
 
-      <!-- main content -->
-      <div class="card grey lighten-3 chat-room">
-        <div class="card-body">
+    <!-- MAIN CONTENT -->
+    <div ng-app="appModule">
+      <div class="container">
+        <div class="row">
           
-            <!-- Grid column -->
-            <div class="col-md-6 col-xl-8 pl-md-3 px-lg-auto px-0">
-      
-              <div class="chat-message">
-      
-                <ul class="list-unstyled chat">
-                  <li class="d-flex justify-content-between mb-4">
-                    <div class="chat-body white p-3 ml-2 z-depth-1">
-                      <div class="header">
-                        <strong class="primary-font">Brad Pitt</strong>
-                        <small class="pull-right text-muted"><i class="far fa-clock"></i> 12 mins ago</small>
-                      </div>
-                      <hr class="w-100">
-                      <p class="mb-0">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua.
-                      </p>
-                    </div>
-                  </li>
-                  <li class="d-flex justify-content-between mb-4">
-                    <div class="chat-body white p-3 z-depth-1">
-                      <div class="header">
-                        <strong class="primary-font">Lara Croft</strong>
-                        <small class="pull-right text-muted"><i class="far fa-clock"></i> 13 mins ago</small>
-                      </div>
-                      <hr class="w-100">
-                      <p class="mb-0">
-                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                        laudantium.
-                      </p>
-                    </div>
-                  </li>
-                  <li class="d-flex justify-content-between mb-4 pb-3">
-                    <div class="chat-body white p-3 ml-2 z-depth-1">
-                      <div class="header">
-                        <strong class="primary-font">Brad Pitt</strong>
-                        <small class="pull-right text-muted"><i class="far fa-clock"></i> 12 mins ago</small>
-                      </div>
-                      <hr class="w-100">
-                      <p class="mb-0">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua.
-                      </p>
-                    </div>
-                  </li>
-                  <li class="white">
-                    <div class="form-group basic-textarea">
-                      <textarea class="form-control pl-2 my-0" id="exampleFormControlTextarea2" rows="3" placeholder="Type your message here..."></textarea>
-                    </div>
-                  </li>
-                  <button type="button" class="btn btn-info btn-rounded btn-sm waves-effect waves-light float-right">Send</button>
-                </ul>
-      
-              </div>
-      
-            </div>
-            <!-- Grid column -->
-      
+          <div class="col-md-12 heading">
+            <h1>Stepper</h1>
+            <small>A ready to use AngularJS Directive</small>
           </div>
-          <!-- Grid row -->
-      
+          
+          <div class="col-md-6 col-md-offset-3 content">
+            <stepper-directive></stepper-directive>
+          </div>
+          
+           <div class="col-md-6 col-md-offset-3">
+            <small>* Bootstrap and Material Design for Bootstrap are not required</small><br>
+            <small>** UI Bootstrap is being used only for the collapse animation. Can be easily replaced by some piece of css</small>
+          </div>
+          
         </div>
-      <!-- End of Main Content -->
+      </div>
+    </div>
+      
+  <!-- End of Main Content -->
 
       <!-- Footer -->
       <footer class="sticky-footer bg-white">
