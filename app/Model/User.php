@@ -50,7 +50,7 @@ class User extends Authenticatable
     }
     public function PO()
     {
-        return $this->hasMany('App\Model\PurchaseOrder', 'users_id', 'id');
+        return $this->hasMany('App\Model\PurchaseOrder', 'user_id', 'id');
     }
     public function complain(){
         return $this->hasMany('App\Model\Complaint', 'users_id', 'id');

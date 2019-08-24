@@ -17,36 +17,22 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/po', function () {
-    return view('dashboard.order.index');
-});
-
-Route::get('/sls', function () {
-    return view('dashboard.sales.index');
-});
-
-Route::get('/op', function () {
-    return view('dashboard.operation.index');
-});
-
-Route::get('/cmp', function () {
-    return view('dashboard.complain.index');
-});
-
-Route::get('user/complaint', 'ComplainController@create')->name('user.complain');
-Route::post('user/add-complaint', 'ComplainController@store')->name('user.store');
-Route::post('user/reply-complaint/{id}', 'ComplainController@reply')->name('user.reply');
-
 Route::resource('purchase', 'PurchaseOrderController');
+Route::get('/purchase/order', 'PurchaseOrderController@purchase')->name('purchase.po');
 
 Route::get('/home', 'HomeController@index')->name('home');
 //sales
 Route::middleware('role:sales')->group(function(){
-    Route::resource('sales','SalesController');
+  Route::resource('sales','SalesController');  
+  Route::match(['put', 'patch'], 'sales/accept/{id}', 'SalesController@accept')->name('sales.accept');
+  Route::match(['put', 'patch'], 'sales/reject/{id}', 'SalesController@reject')->name('sales.reject');
+
 });
 //operation
 Route::middleware('role:operation')->group(function(){
     Route::resource('operation', 'OperationController');
+    Route::match(['put', 'patch'], 'operation/send/{id}', 'OperationController@send')->name('operation.send');
+    Route::get('operation/invoice/{id}', 'OperationController@invoice')->name('operation.invoice');
 });
 
 Route::middleware('role:complain')->group(function(){

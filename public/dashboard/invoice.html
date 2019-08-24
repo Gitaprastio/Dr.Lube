@@ -72,22 +72,21 @@
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
         <a class="nav-link" href="index.html">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <i class="fas fa-fw fa-tachometer-alt fa-2x text-gray-300"></i>
           <span>Dashboard</span></a>
       </li>
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="invoice.html">
+        <a class="nav-link collapsed" href="#">
           <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
           <span>Invoice</span>
         </a>
       </li>
 
       <!-- Nav Item - Tables -->
-      <!-- Nav Item - Tables -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#">
+        <a class="nav-link collapsed" href="complaint.html">
           <i class="fas fa-comments fa-2x text-gray-300"></i>
           <span>Complaint</span>
         </a>
@@ -298,47 +297,75 @@
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Customer Complaint</h1>
+            <h1 class="h3 mb-0 text-gray-800">Invoice</h1>
             <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
           </div>
         </div>
         <!-- /.container-fluid -->
 
-      <!-- main content   -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">List of Invoice</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Organization</th>
+                      <th>Tanggal Order</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Mangga Company</td>
+                      <td>1 August 2019</td>
+                      <td>
+                          <div>
+                            <a href="invoice_page.html" class="btn btn-info">Details</a>
+                          </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Jeruk Company</td>
+                      <td>24 June 2019</td>
+                      <td>
+                          <div>
+                              <a href="#" class="btn btn-info">Details</a>
+                          </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Coconut Company</td>
+                      <td>19 Mei 2019</td>
+                      <td>
+                          <div>
+                              <a href="#" class="btn btn-info">Details</a>
+                          </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Banana Company</td>
+                      <td>7 Mei 2019</td>
+                      <td>
+                          <div>
+                              <a href="#" class="btn btn-info">Details</a>
+                          </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
 
-      <form class="text-center border border-light p-5" action="#!">
-
-        <p class="h4 mb-4">Complaint Form</p>
-    
-        <!-- Name -->
-        <!-- <input type="text" id="defaultContactFormName" class="form-control mb-4" placeholder="Organization"> -->
-    
-        <!-- Subject -->
-        <label>Subject</label>
-        <select class="browser-default custom-select mb-4">
-            <option value="" disabled>Choose option</option>
-            <option value="1" selected>Feedback</option>
-            <option value="2">Report</option>
-            <option value="3">Request</option>
-            <option value="4">Other</option>
-        </select>
-    
-        <!-- Message -->
-        <div class="form-group">
-            <textarea class="form-control rounded-0" id="exampleFormControlTextarea2" rows="3" placeholder="Complaint Detail"></textarea>
-        </div>
-    
-        <!-- Copy -->
-        <div class="custom-control custom-checkbox mb-4">
-            <input type="checkbox" class="custom-control-input" id="defaultContactFormCopy">
-            <label class="custom-control-label" for="defaultContactFormCopy">Send me a copy of this message</label>
-        </div>
-    
-        <!-- Send button -->
-        <button class="btn btn-info btn-block" type="submit">Send</button>
-    
-    </form>
-      
+      </div>
       <!-- End of Main Content -->
 
       <!-- Footer -->

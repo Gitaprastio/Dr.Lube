@@ -1,4 +1,4 @@
-@extends('dashboard.sales.main')
+@extends('dashboard.order.main')
 @section('css')
     
 @endsection
@@ -106,23 +106,6 @@
   </div>
 
   @endforeach
-
-  <div class="row">
-    <div class="col-sm-6">
-      <form action="{{ route('sales.accept', $data->id) }}" method="POST">
-          {{ csrf_field() }}
-          {{ method_field('PUT') }}
-          <button class="w-100 btn btn-success" title="Confirm Purchase Order" onclick="return confirm('Confirm purchase order?')">Confirm</button>
-      </form>
-    </div>
-    <div class="col-sm-6">
-      <form action="{{ route('sales.reject', $data->id) }}" method="POST">
-          {{ csrf_field() }}
-          {{ method_field('PUT') }}
-          <button class="w-100 btn btn-danger" title="Reject Purchase Order" onclick="return confirm('Reject purchase order?')">Reject</button>
-      </form>
-    </div>
-  </div>
 </div>
 
 @endsection
