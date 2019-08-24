@@ -14,7 +14,9 @@ class ComplainController extends Controller
      */
     public function index()
     {
-        return view('dashboard.complain.index');
+        $data = Complaint::with('user.detailUser')->where('status',1)->get();
+        // $org = \App\Model\DetailUser::where('user_id',6);
+        return view('dashboard.complain.index',compact(['data']));
     }
 
     /**
@@ -24,7 +26,7 @@ class ComplainController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.order.complain');
     }
 
     /**
@@ -39,9 +41,23 @@ class ComplainController extends Controller
         $data -> subject = $request -> subject;
         $data -> complaint_desc = $request -> complaint_desc;
         $data -> user_id = auth()->user()->id;
-        $data -> save;
-    }
+        $data -> status = 1;
+        // dd($data);
+        $data -> save();
 
+        return redirect()->route('user.complain')->with('alert-success','Your complaint has been sent!');
+    }
+    public function reply(Request $request,$id)
+    {
+        $data = Complaint::find($id);
+        $data -> pic = $request -> pic;
+        $data -> date_to_meet = $request -> date_to_meet;
+        $data -> status = 2;
+        // dd($data);
+        $data -> save();
+
+        return redirect()->route('user.complain')->with('alert-success','Your complaint has been sent!');
+    }
     /**
      * Display the specified resource.
      *

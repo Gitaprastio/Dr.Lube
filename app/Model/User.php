@@ -41,7 +41,7 @@ class User extends Authenticatable
     ];
 
     public function detailUser(){
-        return hasOne('App\Model\DetailUser');
+        return $this->hasOne('App\Model\DetailUser');
     }
 
     public function agreement()
@@ -51,5 +51,8 @@ class User extends Authenticatable
     public function PO()
     {
         return $this->hasMany('App\Model\PurchaseOrder', 'users_id', 'id');
+    }
+    public function complain(){
+        return $this->hasMany('App\Model\Complaint', 'users_id', 'id');
     }
 }

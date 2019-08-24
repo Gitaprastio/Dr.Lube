@@ -4,7 +4,11 @@
 @endsection
 @section('content')
 <div class="container-fluid">
-
+    @if(Session::has('alert-success'))
+    <div class="alert alert-success">
+        <strong>{{ \Illuminate\Support\Facades\Session::get('alert-success') }}</strong>
+    </div>
+  @endif
   <!-- Page Heading -->
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Complaint Dashboard</h1>
@@ -23,40 +27,83 @@
               <th>No</th>
               <th>Organization</th>
               <th>Subject</th>
+              <th>Description</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
+            <?php $no=1; ?>
+            @foreach($data as $d)
+            
             <tr>
-              <td>1</td>
-              <td>Mangga Company</td>
-              <td>Product Arrival Late</td>
+              <td>{{$no++}}</td>
+              <td>{{$d->user->detailUser->organization_name}}</td>
+              <td>{{$d->subject}}</td>
+              <td>{{$d->complaint_desc}}</td>
               <td>
                 <div>
-                    <a href="#" class="btn btn-warning">Preview</a>
-                    <a href="#" class="btn btn-info">Reply</a>
+                    <button class="btn btn-warning" data-toggle="modal" data-target="#previewModal">Preview</button>
+                    <button class="btn btn-info" data-toggle="modal" data-target="#reply">Reply</button>
                     <a href="#" class="btn btn-success">Done</a>
+
                 </div>
               </td>
             </tr>
-            <tr>
-              <td>2</td>
-              <td>Jeruk Company</td>
-              <td>Bad Quality Oil</td>
-              <td>
-                <div>
-                    <a href="#" class="btn btn-warning">Preview</a>
-                    <a href="#" class="btn btn-info">Reply</a>
-                    <a href="#" class="btn btn-success">Done</a>
+            {{-- preview--}}
+            <div class="modal" tabindex="-1" role="dialog" id="previewModal">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Complaint Preview</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <label style="font-weight:bold" for="description">Subject :</label>
+                      <p > {{$d->subject}}</p>
+                      <label style="font-weight:bold" for="description">Description :</label>
+                      <p>{{$d->complaint_desc}}</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
                 </div>
-              </td>
-            </tr>
+              </div> 
+              {{-- end-preview --}}
+              <div class="modal" tabindex="-1" role="dialog" id="reply">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Complaint Reply</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <form class="text-center border border-light p-5" action="{{route('user.reply',$d->id)}}" method="post" enctype="multipart/form-data">
+                          @csrf
+                          <label for="pic">PIC</label>
+                          <input class="form-control" type="text" name="pic" placeholder="pic number">
+                          <label for="pic">Date</label>
+                          <input class="form-control" type="text" name="date_to_meet" placeholder="date to meet">
+                          <button class="btn btn-info btn-block" type="submit">Send</button>
+                        </form> 
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div> 
+              
+            @endforeach
           </tbody>
         </table>
       </div>
     </div>
   </div>
-
 </div>
 
 @endsection

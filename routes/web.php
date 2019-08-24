@@ -33,6 +33,10 @@ Route::get('/cmp', function () {
     return view('dashboard.complain.index');
 });
 
+Route::get('user/complaint', 'ComplainController@create')->name('user.complain');
+Route::post('user/add-complaint', 'ComplainController@store')->name('user.store');
+Route::post('user/reply-complaint/{id}', 'ComplainController@reply')->name('user.reply');
+
 Route::resource('purchase', 'PurchaseOrderController');
 
 Route::get('/home', 'HomeController@index')->name('home');
