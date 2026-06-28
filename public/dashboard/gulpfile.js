@@ -1,17 +1,19 @@
 "use strict";
 
 // Load plugins
-const autoprefixer = require("gulp-autoprefixer");
+const autoprefixer = require("gulp-autoprefixer").default;
 const browsersync = require("browser-sync").create();
 const cleanCSS = require("gulp-clean-css");
-const del = require("del");
+const dartSass = require("sass");
+const fs = require("fs");
 const gulp = require("gulp");
 const header = require("gulp-header");
-const merge = require("merge-stream");
+const path = require("path");
 const plumber = require("gulp-plumber");
 const rename = require("gulp-rename");
-const sass = require("gulp-sass");
+const gulpSass = require("gulp-sass");
 const uglify = require("gulp-uglify");
+const sass = gulpSass(dartSass);
 
 // Load package.json for banner
 const pkg = require('./package.json');
@@ -43,41 +45,50 @@ function browserSyncReload(done) {
 }
 
 // Clean vendor
-function clean() {
-  return del(["./vendor/"]);
+function clean(done) {
+  fs.rmSync("./vendor", {
+    recursive: true,
+    force: true
+  });
+  done();
+}
+
+function copyDirectory(source, destination) {
+  fs.cpSync(source, destination, {
+    recursive: true
+  });
+}
+
+function copyFiles(source, destination, predicate) {
+  fs.mkdirSync(destination, {
+    recursive: true
+  });
+
+  fs.readdirSync(source, {
+    withFileTypes: true
+  }).forEach((entry) => {
+    if (predicate && !predicate(entry.name, entry)) {
+      return;
+    }
+
+    fs.cpSync(path.join(source, entry.name), path.join(destination, entry.name), {
+      recursive: true
+    });
+  });
 }
 
 // Bring third party dependencies from node_modules into vendor directory
-function modules() {
-  // Bootstrap JS
-  var bootstrapJS = gulp.src('./node_modules/bootstrap/dist/js/*')
-    .pipe(gulp.dest('./vendor/bootstrap/js'));
-  // Bootstrap SCSS
-  var bootstrapSCSS = gulp.src('./node_modules/bootstrap/scss/**/*')
-    .pipe(gulp.dest('./vendor/bootstrap/scss'));
-  // ChartJS
-  var chartJS = gulp.src('./node_modules/chart.js/dist/*.js')
-    .pipe(gulp.dest('./vendor/chart.js'));
-  // dataTables
-  var dataTables = gulp.src([
-      './node_modules/datatables.net/js/*.js',
-      './node_modules/datatables.net-bs4/js/*.js',
-      './node_modules/datatables.net-bs4/css/*.css'
-    ])
-    .pipe(gulp.dest('./vendor/datatables'));
-  // Font Awesome
-  var fontAwesome = gulp.src('./node_modules/@fortawesome/**/*')
-    .pipe(gulp.dest('./vendor'));
-  // jQuery Easing
-  var jqueryEasing = gulp.src('./node_modules/jquery.easing/*.js')
-    .pipe(gulp.dest('./vendor/jquery-easing'));
-  // jQuery
-  var jquery = gulp.src([
-      './node_modules/jquery/dist/*',
-      '!./node_modules/jquery/dist/core.js'
-    ])
-    .pipe(gulp.dest('./vendor/jquery'));
-  return merge(bootstrapJS, bootstrapSCSS, chartJS, dataTables, fontAwesome, jquery, jqueryEasing);
+function modules(done) {
+  copyFiles("./node_modules/bootstrap/dist/js", "./vendor/bootstrap/js");
+  copyDirectory("./node_modules/bootstrap/scss", "./vendor/bootstrap/scss");
+  copyFiles("./node_modules/chart.js/dist", "./vendor/chart.js", (name) => name.endsWith(".js"));
+  copyFiles("./node_modules/datatables.net/js", "./vendor/datatables", (name) => name.endsWith(".js"));
+  copyFiles("./node_modules/datatables.net-bs4/js", "./vendor/datatables", (name) => name.endsWith(".js"));
+  copyFiles("./node_modules/datatables.net-bs4/css", "./vendor/datatables", (name) => name.endsWith(".css"));
+  copyDirectory("./node_modules/@fortawesome/fontawesome-free", "./vendor/fontawesome-free");
+  copyFiles("./node_modules/jquery.easing", "./vendor/jquery-easing", (name) => name.endsWith(".js"));
+  copyFiles("./node_modules/jquery/dist", "./vendor/jquery", (name) => name !== "core.js");
+  done();
 }
 
 // CSS task
@@ -91,7 +102,7 @@ function css() {
     }))
     .on("error", sass.logError)
     .pipe(autoprefixer({
-      browsers: ['last 2 versions'],
+      overrideBrowserslist: ['last 2 versions'],
       cascade: false
     }))
     .pipe(header(banner, {
