@@ -3,13 +3,19 @@
     
 @endsection
 @section('content')
-<div class="container-fluid">
+  <div class="container-fluid">
 
   <!-- Page Heading -->
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Seller Dashboard</h1>
     <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
   </div>
+
+  @if (session('alert'))
+  <div class="alert alert-primary" role="alert">
+    {{ session('alert') }}
+  </div>
+  @endif
 
   <div class="card shadow mb-4">
     <div class="card-header py-3">
@@ -27,30 +33,18 @@
             </tr>
           </thead>
           <tbody>
+            @foreach ($complaints as $complaint)
             <tr>
-              <td>1</td>
-              <td>Mangga Company</td>
-              <td>Product Arrival Late</td>
+              <td>{{$loop->iteration}}</td>
+              <td>{{optional($complaint->user)->name}}</td>
+              <td>{{$complaint->subject}}</td>
               <td>
                 <div>
-                    <a href="#" class="btn btn-warning">Preview</a>
-                    <a href="#" class="btn btn-info">Reply</a>
-                    <a href="#" class="btn btn-success">Done</a>
+                    <span class="badge badge-primary">Status {{$complaint->status}}</span>
                 </div>
               </td>
             </tr>
-            <tr>
-              <td>2</td>
-              <td>Jeruk Company</td>
-              <td>Bad Quality Oil</td>
-              <td>
-                <div>
-                    <a href="#" class="btn btn-warning">Preview</a>
-                    <a href="#" class="btn btn-info">Reply</a>
-                    <a href="#" class="btn btn-success">Done</a>
-                </div>
-              </td>
-            </tr>
+            @endforeach
           </tbody>
         </table>
       </div>

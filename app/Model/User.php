@@ -41,12 +41,12 @@ class User extends Authenticatable
     ];
 
     public function detailUser(){
-        return hasOne('App\Model\DetailUser');
+        return $this->hasOne('App\Model\DetailUser', 'user_id', 'id');
     }
 
     public function agreement()
     {
-        return $this->hasMany('App\Model\ProductAgreement', 'users_id', 'id');
+        return $this->hasMany('App\Model\ProductAgreement', 'user_id', 'id');
     }
     public function PO()
     {

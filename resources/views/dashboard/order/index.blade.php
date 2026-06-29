@@ -64,7 +64,7 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="shipping_address">Shipping Address</label>
-              <textarea required name="shipping_address" class="form-control" id="shipping_address" rows="3" required disabled>{{$user->address}}</textarea>
+              <textarea required name="shipping_address" class="form-control" id="shipping_address" rows="3" required disabled>{{optional($user)->address}}</textarea>
             </div>
         
             <div class="form-group">

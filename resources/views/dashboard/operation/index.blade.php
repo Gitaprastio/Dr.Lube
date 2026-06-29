@@ -50,7 +50,7 @@
                         {{ method_field('PUT') }}
                         <button class="btn btn-success" title="Send Purchase Order" onclick="return confirm('Send purchase order?')">Send</button>
                     </form>
-                    <a href="{{ route('sales.show', $purchase->id) }}" class="btn btn-info">Cetak Invoice</a>
+                    <a href="{{ route('operation.show', $purchase->id) }}" class="btn btn-info">Details</a>
                   </div>
                 </td>
               </tr>

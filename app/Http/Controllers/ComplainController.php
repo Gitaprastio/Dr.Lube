@@ -14,7 +14,11 @@ class ComplainController extends Controller
      */
     public function index()
     {
-        return view('dashboard.complain.index');
+        $complaints = Complaint::with('user')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('dashboard.complain.index', compact('complaints'));
     }
 
     /**
@@ -35,11 +39,19 @@ class ComplainController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'subject' => 'required|string|max:255',
+            'complaint_desc' => 'required|string',
+        ]);
+
         $data = new Complaint;
-        $data -> subject = $request -> subject;
-        $data -> complaint_desc = $request -> complaint_desc;
-        $data -> user_id = auth()->user()->id;
-        $data -> save;
+        $data->subject = $request->subject;
+        $data->complaint_desc = $request->complaint_desc;
+        $data->status = 1;
+        $data->user_id = auth()->user()->id;
+        $data->save();
+
+        return redirect()->route('complain.index')->with('alert', 'Complaint has been submitted!');
     }
 
     /**

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Auth;
-use App\Model\DetailUser;
 use App\Model\PurchaseOrder;
 use App\Model\PurchaseItem;
 
@@ -59,14 +57,14 @@ class SalesController extends Controller
     {
       $title = "Purchase Order Detail";
       $data = PurchaseOrder::where('id', $id)
+      ->where('status', 1)
       ->with('user')
-      ->first();
+      ->firstOrFail();
 
-      $product = PurchaseItem::where('purchase_order_id', $id)
+      $product = PurchaseItem::where('purchase_order_id', $data->id)
       ->with(['listItem.product', 'listItem'])
       ->get();
-      
-      // dd($product);
+
       return view('dashboard.sales.detail', compact('data', 'product', 'title'));
     }
 
@@ -106,7 +104,7 @@ class SalesController extends Controller
     
     public function accept($id)
     {
-        $data = PurchaseOrder::find($id);
+        $data = PurchaseOrder::where('id', $id)->where('status', 1)->firstOrFail();
         $data->status = 2;
         $data->save();
         return redirect()->route('sales.index')->with('alert','Purchase has been approved!');
@@ -114,7 +112,7 @@ class SalesController extends Controller
     
     public function reject($id)
     {
-        $data = PurchaseOrder::find($id);
+        $data = PurchaseOrder::where('id', $id)->where('status', 1)->firstOrFail();
         $data->status = 90;
         $data->save();
         return redirect()->route('sales.index')->with('alert','Purchase has been Rejected!');
