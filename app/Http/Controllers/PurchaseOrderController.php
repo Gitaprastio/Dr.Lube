@@ -4,15 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use App\Model\PurchaseOrder;
 use App\Model\PurchaseItem;
-use App\Model\User;
 use App\Model\DetailUser;
-use App\Model\ProductAgreement;
 use App\Model\ListItem;
 
 class PurchaseOrderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -26,40 +31,17 @@ class PurchaseOrderController extends Controller
 
       $user = DetailUser::where('user_id', $uid)->first();
 
-      $product["cost"] = ListItem::
-      whereHas('agreement', function($q) use ($uid){
-          $q->where('user_id', '=', $uid);
-      })
-      ->get()->pluck('cost');
+      $listItems = $this->authorizedListItems($uid)->get();
+      $products = $listItems->pluck('product');
 
-      $products = ListItem::with('product')
-      ->whereHas('agreement', function($q) use ($uid){
-          $q->where('user_id', '=', $uid);
-      })
-      ->get()->pluck('product');
+      $product = [
+          'cost' => $listItems->pluck('cost'),
+          'name' => $listItems->pluck('product.product_name'),
+          'id' => $listItems->pluck('product.id'),
+          'list_id' => $listItems->pluck('id'),
+      ];
 
-      $product["name"] = ListItem::with('product')
-      ->whereHas('agreement', function($q) use ($uid){
-          $q->where('user_id', '=', $uid);
-      })
-      ->get()->pluck('product.product_name');
-
-      $product["id"] = ListItem::with('product')
-      ->whereHas('agreement', function($q) use ($uid){
-          $q->where('user_id', '=', $uid);
-      })
-      ->get()->pluck('product.id');
-
-      $product["list_id"] = ListItem::
-      whereHas('agreement', function($q) use ($uid){
-          $q->where('user_id', '=', $uid);
-      })
-      ->get()->pluck('id');
-
-      // $product = json_encode($product);
-      // dd($product); 
-
-      return view('dashboard.order.index', compact('title','user','products', 'product', 'product_name', 'product_id', 'cost'));
+      return view('dashboard.order.index', compact('title','user','products', 'product'));
     }
 
     public function index() 
@@ -94,30 +76,86 @@ class PurchaseOrderController extends Controller
      */
     public function store(Request $request)
     {
-      // dd($request);
       $uid = Auth::id();
-      
+
+      $this->validate($request, [
+        'list_id' => 'required|array|min:1',
+        'list_id.*' => 'required|integer|distinct',
+        'quantity' => 'required|array|min:1',
+        'quantity.*' => 'required|integer|min:1',
+        'shipping_address' => 'nullable|string|max:255',
+      ]);
+
+      $listIds = array_map('intval', $request->input('list_id', []));
+      $quantities = array_map('intval', $request->input('quantity', []));
+
+      if (count($listIds) !== count($quantities)) {
+        throw ValidationException::withMessages([
+          'quantity' => ['Each selected product must include a matching quantity.'],
+        ]);
+      }
+
+      $listItems = $this->authorizedListItems($uid)
+        ->whereIn('id', $listIds)
+        ->get()
+        ->keyBy('id');
+
+      if ($listItems->count() !== count($listIds)) {
+        throw ValidationException::withMessages([
+          'list_id' => ['One or more selected products are not available under your agreement.'],
+        ]);
+      }
+
+      $amount = 0;
+      $items = [];
+
+      foreach ($listIds as $key => $listId) {
+        $listItem = $listItems->get($listId);
+        $quantity = $quantities[$key];
+
+        if ($quantity > $listItem->quantity) {
+          throw ValidationException::withMessages([
+            'quantity' => ['Quantity exceeds the contracted quantity for '.$listItem->product->product_name.'.'],
+          ]);
+        }
+
+        $amount += $listItem->cost * $quantity;
+        $items[] = [
+          'list_item_id' => $listId,
+          'quantity' => $quantity,
+        ];
+      }
+
       $user = DetailUser::where('user_id', $uid)->first();
+      $shippingAddress = trim((string) $request->input('shipping_address'));
 
-      $po = new PurchaseOrder;
-      $po->status = 1;
-      $po->amount = $request->total_price;
-      if ($request->shipping_address) {
-        $po->shipping_address = $request->shipping_address;
-      }else {
-        $po->shipping_address = $user->address;
+      if ($shippingAddress === '') {
+        $shippingAddress = $user ? $user->address : '';
       }
-      $po->user_id = $uid;
-      $po->save();
 
-      $pid = $po->id;
-      foreach ($request->list_id as $key => $value) {
-        $data = new PurchaseItem;
-        $data->purchase_order_id = $pid;
-        $data->list_item_id = $value;
-        $data->quantity = $request->quantity[$key];
-        $data->save();
+      if ($shippingAddress === '') {
+        throw ValidationException::withMessages([
+          'shipping_address' => ['Shipping address is required.'],
+        ]);
       }
+
+      DB::transaction(function () use ($uid, $amount, $shippingAddress, $items) {
+        $po = new PurchaseOrder;
+        $po->status = 1;
+        $po->amount = $amount;
+        $po->shipping_address = $shippingAddress;
+        $po->shipping_date = now();
+        $po->user_id = $uid;
+        $po->save();
+
+        foreach ($items as $item) {
+          $data = new PurchaseItem;
+          $data->purchase_order_id = $po->id;
+          $data->list_item_id = $item['list_item_id'];
+          $data->quantity = $item['quantity'];
+          $data->save();
+        }
+      });
 
       return redirect()->route('purchase.index')->with('alert','Purchase has been processed!');
     }
@@ -132,14 +170,14 @@ class PurchaseOrderController extends Controller
     {
       $title = "Purchase Order Detail";
       $data = PurchaseOrder::where('id', $id)
+      ->where('user_id', Auth::id())
       ->with('user')
-      ->first();
+      ->firstOrFail();
 
-      $product = PurchaseItem::where('purchase_order_id', $id)
+      $product = PurchaseItem::where('purchase_order_id', $data->id)
       ->with(['listItem.product', 'listItem'])
       ->get();
-      
-      // dd($product);
+
       return view('dashboard.order.detail', compact('data', 'product', 'title'));
     }
 
@@ -175,5 +213,13 @@ class PurchaseOrderController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function authorizedListItems($userId)
+    {
+      return ListItem::with('product')
+        ->whereHas('agreement', function($q) use ($userId){
+          $q->where('user_id', '=', $userId);
+        });
     }
 }

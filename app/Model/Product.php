@@ -9,7 +9,7 @@ class Product extends Model
     protected $table = 'products';
 
     public function detail(){
-        return hasOne('App\Model\DetailProduct');
+        return $this->hasOne('App\Model\DetailProduct', 'product_id', 'id');
     }
 
     public function agreement()

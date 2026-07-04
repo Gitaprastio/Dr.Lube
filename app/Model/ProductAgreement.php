@@ -10,7 +10,7 @@ class ProductAgreement extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\Model\User', 'users_id');
+        return $this->belongsTo('App\Model\User', 'user_id');
     }
 
     public function items()

@@ -1,4 +1,5 @@
 /node_modules
+/.phpunit.cache
 /public/hot
 /public/mix-manifest.json
 /public/storage

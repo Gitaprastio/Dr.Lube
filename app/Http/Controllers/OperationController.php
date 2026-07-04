@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Auth;
-use App\Model\DetailUser;
 use App\Model\PurchaseOrder;
 use App\Model\PurchaseItem;
 
@@ -50,7 +48,17 @@ class OperationController extends Controller
      */
     public function show($id)
     {
-      //
+      $title = "Purchase Order Detail";
+      $data = PurchaseOrder::where('id', $id)
+      ->where('status', 2)
+      ->with('user')
+      ->firstOrFail();
+
+      $product = PurchaseItem::where('purchase_order_id', $data->id)
+      ->with(['listItem.product', 'listItem'])
+      ->get();
+
+      return view('dashboard.operation.detail', compact('data', 'product', 'title'));
     }
 
     /**
@@ -89,10 +97,10 @@ class OperationController extends Controller
     
     public function send($id)
     {
-        $data = PurchaseOrder::find($id);
+        $data = PurchaseOrder::where('id', $id)->where('status', 2)->firstOrFail();
         $data->status = 3;
         $data->save();
-        return redirect()->route('operation.index')->with('alert','Purchase has been approved!');
+        return redirect()->route('operation.index')->with('alert','Purchase has been sent!');
     }
     
     public function invoice($id)

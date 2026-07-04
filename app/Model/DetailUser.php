@@ -9,6 +9,6 @@ class DetailUser extends Model
     protected $table = 'detail_users';
 
     public function user(){
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Model\User', 'user_id');
     }
 }

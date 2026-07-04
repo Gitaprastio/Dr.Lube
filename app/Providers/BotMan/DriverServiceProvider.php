@@ -3,7 +3,8 @@
 namespace App\Providers\BotMan;
 
 use BotMan\BotMan\Drivers\DriverManager;
-use BotMan\Studio\Providers\DriverServiceProvider as ServiceProvider;
+use BotMan\Drivers\Web\WebDriver;
+use Illuminate\Support\ServiceProvider;
 
 class DriverServiceProvider extends ServiceProvider
 {
@@ -13,15 +14,15 @@ class DriverServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $drivers = [];
+    protected $drivers = [
+        WebDriver::class,
+    ];
 
     /**
      * @return void
      */
     public function boot()
     {
-        parent::boot();
-
         foreach ($this->drivers as $driver) {
             DriverManager::loadDriver($driver);
         }
